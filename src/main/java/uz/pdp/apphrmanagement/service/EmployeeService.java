@@ -13,6 +13,8 @@ import uz.pdp.apphrmanagement.repository.TurniketRepository;
 import uz.pdp.apphrmanagement.repository.UserRepository;
 
 import java.security.Security;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -181,6 +183,30 @@ public class EmployeeService {
 
         List<Task> taskList = taskRepository.findAll();
         return new ApiResponse("Task list", true, taskList);
+    }
+
+
+    /*
+     * vaxtida tugatilgan va vaxtida tugatilmagan tasklar haqida
+     *
+     *  */
+    public ApiResponse getTaskOnTime(UUID id, Timestamp byTime) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        Set<Role> roles = user.getRoles();
+        for (Role role : roles) {
+            if (!role.getRoleName().name().equals("DIRECTOR")) {
+                return new ApiResponse("director,hr_manager can see the salaries", false);
+            }
+        }
+
+        LocalDateTime onTime = byTime.toLocalDateTime();
+
+        List<Task> taskByOnTime = taskRepository.findTaskByOnTime(onTime);
+        if (taskByOnTime.isEmpty())
+            return new ApiResponse("task time not found", false);
+
+        return new ApiResponse("Get task list", true, taskByOnTime);
     }
 
 

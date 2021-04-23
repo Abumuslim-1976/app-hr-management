@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface TurniketRepository extends JpaRepository<Turniket,Integer> {
 
     Optional<Turniket> findByUserId(UUID user_id);
+
+    boolean existsByUserId(UUID user_id);
 }

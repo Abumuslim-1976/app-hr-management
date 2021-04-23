@@ -15,12 +15,6 @@ import java.util.UUID;
 @NoArgsConstructor
 public class TurniketDto {
 
-    private LocalDateTime accessTime;               // xodimning kirish vaqti
-
-    private LocalDateTime exitTime;                 // xodimning chiqish vaqti
-
-    private boolean accessAndExitMode;              // xodimning ayni paytdagi kirish yoki chiqish holati
-
     private UUID userId;                            // turniketdan o`tuvchi xodim
 
 }

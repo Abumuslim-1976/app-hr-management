@@ -9,6 +9,8 @@ import uz.pdp.apphrmanagement.payload.ApiResponse;
 import uz.pdp.apphrmanagement.payload.SalaryDto;
 import uz.pdp.apphrmanagement.service.EmployeeService;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -19,7 +21,7 @@ public class EmployeeController {
     EmployeeService employeeService;
 
 
-//    -------------- Director va Manager uchun xodimlar ro`yxati ko`rinib turadi ------------
+    //    -------------- Director va Manager uchun xodimlar ro`yxati ko`rinib turadi ------------
     @GetMapping("/showAllEmployee")
     public HttpEntity<?> allEmployee() {
         ApiResponse apiResponse = employeeService.showEmployeeForDirectorAndManager();
@@ -72,6 +74,17 @@ public class EmployeeController {
     public HttpEntity<?> taskByTime() {
         ApiResponse taskByTime = employeeService.getTaskByTime();
         return ResponseEntity.status(taskByTime.isSuccess() ? 200 : 409).body(taskByTime);
+    }
+
+
+    /*
+     * vaxtida tugatilgan va vaxtida tugatilmagan tasklar haqida
+     *
+     *  */
+    @GetMapping("/byTime")
+    public HttpEntity<?> byTime(@RequestParam UUID id, @RequestParam Timestamp byTime) {
+        ApiResponse taskOnTime = employeeService.getTaskOnTime(id, byTime);
+        return ResponseEntity.status(taskOnTime.isSuccess() ? 200 : 409).body(taskOnTime);
     }
 
 }
